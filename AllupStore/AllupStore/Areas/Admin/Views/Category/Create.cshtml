@@ -1,0 +1,76 @@
+﻿@model CategoryCreateViewModel
+    ViewData["Title"] = "Create";
+}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title"> Create New Category</h4>
+
+                    <form class="forms-sample" method="post" asp-controller="Category" asp-action="Create" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label asp-for="Name">Name</label>
+                            <input class="form-control" asp-for="Name" placeholder="Name">
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IsMain">Is Main</label>
+                            <input class="form-check" asp-for="IsMain" placeholder="Name">
+                        </div>
+                        <div class="form-group" id="FileInput">
+                            <label asp-for="File">Image</label>
+                            <input class="form-control" asp-for="File" placeholder="Name">
+                            <span class="text-danger" asp-validation-for="File"></span>
+                        </div>
+                        <div class="form-group" id="ParentCat">
+                            <label asp-for="ParentId">Parent</label>
+                            <select class="form-control" asp-for="ParentId" >
+                                <option value="0" selected disabled>-- Select Parent --</option>    
+                                @foreach (var category in ViewBag.Parents)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            </select>
+                            <span class="text-danger" asp-validation-for="ParentId"></span>
+                        </div>
+
+
+
+
+                        <button type="submit" class="btn btn-primary me-2">Submit</button>
+                        <button class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+<partial name="_ValidatePartial">
+    
+    <script>
+
+        if ($("#IsMain").is(":checked")) {
+            $("#ParentCat").hide();
+            $("#FileInput").show();
+        } else {
+            $("#ParentCat").show();
+            $("#FileInput").hide();
+        }
+
+        $(document).on("change", "#IsMain", function () {
+            if ($(this).is(":checked")) {
+                $("#ParentCat").hide();
+                $("#FileInput").show();
+            } else {
+                $("#ParentCat").show();
+                $("#FileInput").hide();
+            }
+        })
+    </script>
+
+}
